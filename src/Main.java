@@ -1,6 +1,10 @@
-import entities.InverterClass;
 import entities.User;
 import functional_interfaces.StringModifier;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Supplier;
 
 public class Main {
 	public static void main(String[] args) {
@@ -27,11 +31,44 @@ public class Main {
 			return inverted;
 		};
 
-		InverterClass inverterClass = new InverterClass(); // Soluzione "Old style"
+/*		InverterClass inverterClass = new InverterClass(); // Soluzione "Old style"
 		System.out.println((inverterClass.modify("CIAO")));
 
 		System.out.println(wrapper.modify("CIAO"));
-		System.out.println(inverter.modify("CIAO"));
+		System.out.println(inverter.modify("CIAO"));*/
 
+		// ********************************** PREDICATES *****************************
+/*		Predicate<Integer> isMoreThanZero = num -> num > 0;
+		Predicate<Integer> isLessThanHundred = num -> num < 100;
+
+		Predicate<Integer> isMoreThanZeroAndLessThanHundred = isMoreThanZero.and(isLessThanHundred);
+
+		System.out.println(isMoreThanZeroAndLessThanHundred.test(aldo.getAge()));*/
+
+		// ************************************ SUPPLIER *****************************
+
+		Supplier<Integer> integerSupplier = () -> {
+			// Il supplier ci consente di definire una funzione che ci fornisce oggetti, numeri, stringhe create secondo un certo criterio all'occorrenza
+			Random rndm = new Random();
+			return rndm.nextInt(1, 101);
+		};
+
+		List<Integer> interiRandom = new ArrayList<>();
+
+		for (int i = 0; i < 100; i++) {
+			interiRandom.add(integerSupplier.get()); // .get() è il metodo dell'interfaccia Supplier che ci fornisce in questo caso un numero intero random
+		}
+
+		System.out.println(interiRandom);
+
+		Supplier<User> userSupplier = () -> new User("NOME", "COGNOME", integerSupplier.get());
+
+		List<User> users = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			users.add(userSupplier.get());
+		}
+
+		users.forEach(user -> System.out.println(user));
+		// users.forEach(System.out::println); // identica a sopra però un pelo più compatta
 	}
 }
