@@ -1,7 +1,6 @@
-import entities.User;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -95,6 +94,7 @@ public class Main {
 
 		interiRandom.stream().filter(isMoreThanTen.and(isLessThanTwenty)).forEach(System.out::println);*/
 
+/*
 		System.out.println("---------------------------------- MAP --------------------------------------");
 
 		Supplier<User> userSupplier = () -> new User("NOME", "COGNOME", integerSupplier.get());
@@ -143,7 +143,28 @@ public class Main {
 		} else {
 			System.out.println("Non ce n'è nessuno");
 		}
+*/
 
+		// ****************************************************** DATE *************************************************
+		LocalDate today = LocalDate.now();
+		System.out.println(today);
+
+		LocalDate tomorrow = today.plusDays(1);
+		System.out.println(tomorrow);
+
+		LocalDate yesterday = today.minusDays(1);
+		System.out.println(yesterday);
+
+		LocalDate nextYear = today.plusYears(1);
+		System.out.println(nextYear);
+
+		System.out.println(yesterday.isBefore(tomorrow));
+
+		LocalDate date = LocalDate.parse("2023-10-31");
+		System.out.println(date);
+
+		System.out.println(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).format(date));
+		System.out.println(date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 
 	}
 
