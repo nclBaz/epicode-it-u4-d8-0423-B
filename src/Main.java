@@ -1,7 +1,8 @@
+import entities.User;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class Main {
@@ -75,7 +76,7 @@ public class Main {
 			Random rndm = new Random();
 			return rndm.nextInt(1, 101);
 		};
-
+/*
 		List<Integer> interiRandom = new ArrayList<>();
 
 		for (int i = 0; i < 100; i++) {
@@ -92,8 +93,58 @@ public class Main {
 		Predicate<Integer> isMoreThanTen = num -> num > 10;
 		Predicate<Integer> isLessThanTwenty = num -> num < 20;
 
-		interiRandom.stream().filter(isMoreThanTen.and(isLessThanTwenty)).forEach(System.out::println);
+		interiRandom.stream().filter(isMoreThanTen.and(isLessThanTwenty)).forEach(System.out::println);*/
+
+		System.out.println("---------------------------------- MAP --------------------------------------");
+
+		Supplier<User> userSupplier = () -> new User("NOME", "COGNOME", integerSupplier.get());
+
+		List<User> users = new ArrayList<>();
+		for (int i = 0; i < 100; i++) {
+			users.add(userSupplier.get());
+		}
+
+		users.stream().map(user -> user.getAge()).forEach(età -> System.out.println(età));
+		// users.stream().map(User::getAge).forEach(System.out::println);
+
+		System.out.println(" -------------------------------- MAP & FILTER --------------------------------");
+
+		users.stream().map(user -> user.getAge()).filter(età -> età < 18).forEach(età -> System.out.println(età));
+
+		List<Integer> etàDegliUserMinorenni = users.stream().map(user -> user.getAge()).filter(età -> età < 18).toList();
+		// toList() chiude lo Stream restituendomi una Lista. toList è un'alternativa più pratica del .collect quando siamo sicuri di voler fare confluire il tutto in una lista
+		List<String> nomiDeiMinorenni = users.stream().filter(user -> user.getAge() < 18).map(user -> user.getName()).toList();
+		nomiDeiMinorenni.forEach(user -> System.out.println(user));
+
+
+		System.out.println(" -------------------------------- REDUCE --------------------------------");
+		int totalAge = users.stream().map(user -> user.getAge()).reduce(0, (partialSum, currentElem) -> partialSum + currentElem);
+		System.out.println("Età totale degli user: " + totalAge);
+
+
+		System.out.println(" -------------------------------- ALLMATCH & ANYMATCH --------------------------------");
+		// .some() .every() di JavaScript corrispondono a .allMatch e .anyMatch di Java
+
+		// Controllo se tutti gli utenti sono maggiorenni
+		if (users.stream().allMatch(user -> user.getAge() >= 18)) {// allMatch mi torna true/false a seconda se la condizione è soddisfatta per TUTTI gli elementi
+			System.out.println("Sono tutti maggiorenni");
+		} else {
+			System.out.println("C'è qualche minorenne");
+		}
+		// Controllo se gli utenti filtrati sono maggiorenni
+		if (users.stream().filter(user -> user.getAge() >= 18).allMatch(user -> user.getAge() >= 18)) {// allMatch mi torna true/false a seconda se la condizione è soddisfatta per TUTTI gli elementi
+			System.out.println("Sono tutti maggiorenni");
+		} else {
+			System.out.println("C'è qualche minorenne");
+		}
+
+		if (users.stream().anyMatch(user -> user.getAge() >= 99)) {
+			System.out.println("C'è ALMENO uno che ha 99 anni");
+		} else {
+			System.out.println("Non ce n'è nessuno");
+		}
 
 
 	}
+
 }
